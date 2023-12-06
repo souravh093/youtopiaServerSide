@@ -2,37 +2,39 @@ import prisma from "../DB/db.config.js";
 
 export const createRole = async (req, res) => {
   try {
-    const { roleName, featuresName, subFeaturesName } = req.body;
+    const { roleName, features } = req.body;
 
+    // Create AdminRole
     const adminRole = await prisma.adminRole.create({
       data: {
-        roleName: roleName,
+        roleName,
         AdminFeatures: {
-          create: featuresName.map((featureName) => ({
-            featuresName: featureName,
+          create: features.map((feature) => ({
+            featuresName: feature.featuresName,
             AdminSubFeatures: {
-              create: subFeaturesName.map((subFeatureName) => ({
-                subFeaturesName: subFeatureName,
+              create: feature.subFeatures.map((subFeature) => ({
+                subFeaturesName: subFeature,
               })),
             },
           })),
         },
       },
+      include: {
+        AdminFeatures: {
+          include: {
+            AdminSubFeatures: true,
+          },
+        },
+      },
     });
 
-    return res.json({
-      status: 200,
-      data: adminRole,
-      message: "Role Created",
-    });
+    res.json({ success: true, adminRole });
   } catch (error) {
-    console.error("Error creating role:", error);
-    return res.status(500).json({
-      status: 500,
-      message: "Internal Server Error",
-    });
+    console.error(error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
+
 
 // find all role with features and subfeatures
 export const getAllRoles = async (req, res) => {
@@ -54,25 +56,6 @@ export const getAllRoles = async (req, res) => {
     });
   } catch (error) {
     console.error("Error getting all roles:", error);
-    return res.status(500).json({
-      status: 500,
-      message: "Internal Server Error",
-    });
-  }
-};
-
-// delete all roles
-export const deleteAllRoles = async (req, res) => {
-  try {
-    const deleteAllRoles = await prisma.adminRole.deleteMany();
-
-    return res.json({
-      status: 200,
-      data: deleteAllRoles,
-      message: "All Roles Deleted",
-    });
-  } catch (error) {
-    console.error("Error deleting all roles:", error);
     return res.status(500).json({
       status: 500,
       message: "Internal Server Error",

@@ -43,7 +43,7 @@ model AdminUser {
   password      String?
   image         String?
   created_at    DateTime    @default(now())
-  role          AdminRole?   @relation(fields: [roleId], references: [id])
+  role          AdminRole?  @relation(fields: [roleId], references: [id])
   roleId        String?
   status        String      @default("Active")
   News          News[]
@@ -65,7 +65,7 @@ model AdminFeatures {
   featuresName     String
   created_at       DateTime           @default(now())
   adminRoleId      String?
-  AdminRole        AdminRole?          @relation(fields: [adminRoleId], references: [id])
+  AdminRole        AdminRole?         @relation(fields: [adminRoleId], references: [id])
   AdminSubFeatures AdminSubFeatures[]
 }
 
@@ -79,7 +79,7 @@ model AdminSubFeatures {
 model News {
   id            String     @id @default(uuid())
   title         String
-  content       String
+  content       String     @db.LongText
   thumbnail     String
   category      String
   customer      Customer?  @relation(fields: [authorId], references: [id])
