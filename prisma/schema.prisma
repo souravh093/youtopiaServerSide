@@ -130,28 +130,31 @@ model Bookmark {
   newsId      String
   customer    Customer  @relation(fields: [customerId], references: [id])
   customerId  String
+  videoNews   VideoNews @relation(fields: [videoNewsId], references: [id])
+  videoNewsId String
   adminUser   AdminUser @relation(fields: [adminUserId], references: [id])
   adminUserId String
 }
 
 model VideoNews {
-  id            String    @id @default(uuid())
+  id            String     @id @default(uuid())
   title         String
   content       String
   thumbnail     String?
   videoUrl      String
   category      String
-  customer      Customer  @relation(fields: [authorId], references: [id])
+  customer      Customer   @relation(fields: [authorId], references: [id])
   authorId      String
-  adminUser     AdminUser @relation(fields: [adminUserId], references: [id])
+  adminUser     AdminUser  @relation(fields: [adminUserId], references: [id])
   adminUserId   String
-  created_at    DateTime  @default(now())
-  status        String    @default("Pending")
-  LikeCount     Int       @default(0)
-  commentCount  Int       @default(0)
-  ReportCount   Int       @default(0)
-  bookmarkCount Int       @default(0)
-  isDisable     Boolean   @default(false)
+  created_at    DateTime   @default(now())
+  status        String     @default("Pending")
+  LikeCount     Int        @default(0)
+  commentCount  Int        @default(0)
+  ReportCount   Int        @default(0)
+  bookmarkCount Int        @default(0)
+  isDisable     Boolean    @default(false)
   Comment       Comment[]
   Report        Report[]
+  Bookmark      Bookmark[]
 }

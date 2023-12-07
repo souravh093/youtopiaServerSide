@@ -1,37 +1,36 @@
 import prisma from "../DB/db.config.js";
 
-export const createComment = async (req, res) => {
+export const createBookmark = async (req, res) => {
   try {
-    const { customerId, adminUserId, newsId, comment, videoNewsId } = req.body;
+    const { customerId, newsId, videoNewsId, adminUserId } = req.body;
 
     await prisma.news.update({
       where: {
         id: newsId,
       },
       data: {
-        commentCount: {
+        bookmarkCount: {
           increment: 1,
         },
       },
-    })
+    });
 
-    const newComment = await prisma.comment.create({
+    const newBookmark = await prisma.bookmark.create({
       data: {
         customerId,
-        adminUserId,
         newsId,
-        comment,
         videoNewsId,
+        adminUserId,
       },
     });
 
     return res.json({
       status: 200,
-      data: newComment,
-      message: "Comment Created",
+      data: newBookmark,
+      message: "Bookmark Created",
     });
   } catch (error) {
-    console.error("Error creating comment:", error);
+    console.error("Error creating bookmark:", error);
     return res.status(500).json({
       status: 500,
       message: "Internal Server Error",
@@ -39,8 +38,8 @@ export const createComment = async (req, res) => {
   }
 };
 
-// comment delete
-export const deleteComment = async (req, res) => {
+// bookmark delete
+export const deleteBookmark = async (req, res) => {
   const id = req.params.id;
   const newsId = req.params.newsId;
 
@@ -49,14 +48,14 @@ export const deleteComment = async (req, res) => {
       id: newsId,
     },
     data: {
-      commentCount: {
+      bookmarkCount: {
         decrement: 1,
       },
     },
-  })
+  });
 
   try {
-    const deleteComment = await prisma.comment.delete({
+    const deleteBookmark = await prisma.bookmark.delete({
       where: {
         id: id,
       },
@@ -64,17 +63,14 @@ export const deleteComment = async (req, res) => {
 
     return res.json({
       status: 200,
-      data: deleteComment,
-      message: "Comment Deleted",
+      data: deleteBookmark,
+      message: "Bookmark Deleted",
     });
   } catch (error) {
-    console.error("Error deleting comment:", error);
+    console.error("Error deleting bookmark:", error);
     return res.status(500).json({
       status: 500,
       message: "Internal Server Error",
     });
   }
 };
-
-
- 

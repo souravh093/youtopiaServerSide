@@ -51,6 +51,17 @@ export const getAdminUserByEmail = async (req, res) => {
       where: {
         email: email,
       },
+      include: {
+        role: {
+          include: {
+            AdminFeatures: {
+              include: {
+                AdminSubFeatures: true,
+              },
+            },
+          },
+        },  
+      },
     });
 
     if (!findAdminUser) {

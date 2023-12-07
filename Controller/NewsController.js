@@ -36,6 +36,7 @@ export const createNews = async (req, res) => {
   }
 };
 
+
 // news find unique
 export const getNewsById = async (req, res) => {
   const id = req.params.id;
@@ -43,8 +44,11 @@ export const getNewsById = async (req, res) => {
   try {
     const findNews = await prisma.news.findUnique({
       where: {
-        id: Number(id),
+        id: id,
       },
+      include: {
+        Comment: true
+      }
     });
 
     if (!findNews) {
