@@ -62,3 +62,36 @@ export const getAllRoles = async (req, res) => {
     });
   }
 };
+
+// delete role by id with features and subfeatures
+export const deleteRole = async (req, res) => {
+  try {
+    const id = req.params;
+
+    const deleteRole = await prisma.adminRole.delete({
+      where: {
+        id: id,
+      },
+      include: {
+        AdminFeatures: {
+          include: {
+            AdminSubFeatures: true,
+          },
+        },
+      },
+    });
+
+    return res.json({
+      status: 200,
+      data: deleteRole,
+      message: "Role deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting role:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+

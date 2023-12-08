@@ -158,3 +158,10 @@ model VideoNews {
   Report        Report[]
   Bookmark      Bookmark[]
 }
+
+model Advertisement {
+  id         String   @id @default(uuid())
+  adsImage   String
+  created_at DateTime @default(now())
+  status     String   @default("Active")
+}

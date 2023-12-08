@@ -36,6 +36,68 @@ export const createNews = async (req, res) => {
   }
 };
 
+// find all news
+export const getNewsAll = async (req, res) => {
+  try {
+    const allNews = await prisma.news.findMany({
+      skip: 0,
+      take: 4,
+      include: {
+        adminUser: true,
+        customer: true,
+        Comment: {
+          include: {
+            adminUser: true,
+            customer: true,
+          },
+        },
+      },
+    });
+
+    return res.json({
+      status: 200,
+      data: allNews,
+      message: "All News Found",
+    });
+  } catch (error) {
+    console.error("Error finding all news:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getNewsAllWithPagination = async (req, res) => {
+  try {
+    const takeLimit = req.query.take;
+    const skipLimit = req.query.skip;
+    const allNews = await prisma.news.findMany({
+      skip: +skipLimit,
+      take: +takeLimit,
+      include: {
+        Comment: {
+          include: {
+            adminUser: true,
+            customer: true,
+          },
+        },
+      },
+    });
+
+    return res.json({
+      status: 200,
+      data: allNews,
+      message: "All News Found",
+    });
+  } catch (error) {
+    console.error("Error finding all news:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
 
 // news find unique
 export const getNewsById = async (req, res) => {
@@ -47,8 +109,15 @@ export const getNewsById = async (req, res) => {
         id: id,
       },
       include: {
-        Comment: true
-      }
+        adminUser: true,
+        customer: true,
+        Comment: {
+          include: {
+            customer: true,
+            adminUser: true,
+          },
+        },
+      },
     });
 
     if (!findNews) {
@@ -77,7 +146,34 @@ export const getAllNews = async (req, res) => {
   try {
     const allNews = await prisma.news.findMany({
       orderBy: {
-        createdAt: "desc",
+        created_at: "desc",
+      },
+    });
+
+    return res.json({
+      status: 200,
+      data: allNews,
+      message: "All News Found",
+    });
+  } catch (error) {
+    console.error("Error finding all news:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getLatestNews = async (req, res) => {
+  try {
+    const allNews = await prisma.news.findMany({
+      orderBy: {
+        created_at: "desc",
+      },
+      take: 4,
+      include: {
+        adminUser: true,
+        customer: true,
       },
     });
 
@@ -98,8 +194,7 @@ export const getAllNews = async (req, res) => {
 // update news
 export const updateNewsById = async (req, res) => {
   const id = req.params.id;
-  const { title, content, thumbnail, category, authorId, adminUserId } =
-    req.body;
+  const { title, content, thumbnail, category } = req.body;
 
   try {
     const updateNews = await prisma.news.update({
@@ -146,6 +241,75 @@ export const deleteNewsById = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting news:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getSportNews = async (req, res) => {
+  try {
+    const sportNews = await prisma.news.findMany({
+      where: {
+        status: "Pending",
+      },
+    });
+
+    return res.json({
+      status: 200,
+      data: sportNews,
+      message: "Sport News Found",
+    });
+    console.log(sportNews)
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+// news find all by category
+export const getNewsByCategory = async (req, res) => {
+  const category = req.params.category;
+  const id = req.params.id;
+
+  try {
+    const findNews = await prisma.news.findMany({
+      where: {
+        category: category,
+        NOT: {
+          id: id,
+        },
+      },
+      include: {
+        adminUser: true,
+        customer: true,
+        Comment: {
+          include: {
+            customer: true,
+            adminUser: true,
+          },
+        },
+      },
+      take: 3,
+    });
+
+    if (!findNews) {
+      return res.json({
+        status: 400,
+        message: "News not found. Please enter another id",
+      });
+    }
+
+    return res.json({
+      status: 200,
+      data: findNews,
+      message: "News Found",
+    });
+  } catch (error) {
+    console.error("Error finding news:", error);
     return res.status(500).json({
       status: 500,
       message: "Internal Server Error",
