@@ -6,8 +6,7 @@ import RoleRoutes from "./roleRoutes.js";
 import AdminUserRoutes from "./adminUserRoutes.js";
 import NewsRoutes from "./newsRouts.js";
 import CommentRoutes from "./commentRoutes.js";
-// import PostRoutes from "./postRoutes.js";
-// import CommentRoutes from "./commentRoutes.js";
+import VideoNewsRoutes from "./videoNewsRoutes.js"
 
 const router = Router();
 
@@ -17,7 +16,6 @@ router.use("/api/role", RoleRoutes);
 router.use("/api/adminUser", AdminUserRoutes);
 router.use("/api/news", NewsRoutes);
 router.use("/api/comment", CommentRoutes);
-// router.use("/api/post", PostRoutes);
-// router.use("/api/comment", CommentRoutes);
+router.use("/api/videoNews", VideoNewsRoutes);
 
 export default router;

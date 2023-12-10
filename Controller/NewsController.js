@@ -252,7 +252,7 @@ export const getSportNews = async (req, res) => {
   try {
     const sportNews = await prisma.news.findMany({
       where: {
-        status: "Pending",
+        category: "Sports",
       },
     });
 
@@ -261,7 +261,7 @@ export const getSportNews = async (req, res) => {
       data: sportNews,
       message: "Sport News Found",
     });
-    console.log(sportNews)
+    console.log(sportNews);
   } catch (error) {
     return res.status(500).json({
       status: 500,
@@ -316,3 +316,74 @@ export const getNewsByCategory = async (req, res) => {
     });
   }
 };
+
+// Route to get top news by likes, comments, and share
+export const getTopNews = async (req, res) => {
+  try {
+    const topLikes = await prisma.news.findFirst({
+      orderBy: {
+        LikeCount: "desc",
+      },
+    });
+
+    const topComments = await prisma.news.findFirst({
+      orderBy: {
+        commentCount: "desc",
+      },
+    });
+
+    const topShares = await prisma.news.findFirst({
+      orderBy: {
+        shareCount: "desc",
+      },
+    });
+
+    return res.json({
+      status: 200,
+      data: {
+        topLikes,
+        topComments,
+        topShares,
+      },
+      message: "Top News Found",
+    });
+  } catch (error) {
+    console.error("Error finding top news:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+// LikeCount increment by 1 when user likes a news
+export const incrementLikeCount = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const likeCount = await prisma.news.update({
+      where: {
+        id: id,
+      },
+      data: {
+        LikeCount: {
+          increment: 1,
+        },
+      },
+    });
+
+    return res.json({
+      status: 200,
+      data: likeCount,
+      message: "Like Count Updated",
+    });
+  } catch (error) {
+    console.error("Error updating like count:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+

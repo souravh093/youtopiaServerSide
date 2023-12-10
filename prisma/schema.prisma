@@ -90,6 +90,7 @@ model News {
   status        String     @default("Pending")
   LikeCount     Int        @default(0)
   commentCount  Int        @default(0)
+  shareCount    Int        @default(0)
   ReportCount   Int        @default(0)
   bookmarkCount Int        @default(0)
   isDisable     Boolean    @default(false)
@@ -139,18 +140,19 @@ model Bookmark {
 model VideoNews {
   id            String     @id @default(uuid())
   title         String
-  content       String
+  content       String     @db.LongText
   thumbnail     String?
   videoUrl      String
   category      String
-  customer      Customer   @relation(fields: [authorId], references: [id])
-  authorId      String
-  adminUser     AdminUser  @relation(fields: [adminUserId], references: [id])
-  adminUserId   String
+  customer      Customer?  @relation(fields: [authorId], references: [id])
+  authorId      String?
+  adminUser     AdminUser? @relation(fields: [adminUserId], references: [id])
+  adminUserId   String?
   created_at    DateTime   @default(now())
   status        String     @default("Pending")
   LikeCount     Int        @default(0)
   commentCount  Int        @default(0)
+  shareCount    Int        @default(0)
   ReportCount   Int        @default(0)
   bookmarkCount Int        @default(0)
   isDisable     Boolean    @default(false)
@@ -161,7 +163,12 @@ model VideoNews {
 
 model Advertisement {
   id         String   @id @default(uuid())
-  adsImage   String
+  primary1   String
+  primary2   String
+  secondary1 String
+  secondary2 String
+  tertiary1  String
+  tertiary2  String
   created_at DateTime @default(now())
   status     String   @default("Active")
 }
