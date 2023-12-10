@@ -76,5 +76,34 @@ export const deleteComment = async (req, res) => {
   }
 };
 
+// comment update
+export const updateComment = async (req, res) => {
+  const id = req.params.id;
+  const { comment } = req.body;
+
+  try {
+    const updateComment = await prisma.comment.update({
+      where: {
+        id: id,
+      },
+      data: {
+        comment,
+      },
+    });
+
+    return res.json({
+      status: 200,
+      data: updateComment,
+      message: "Comment Updated",
+    });
+  } catch (error) {
+    console.error("Error updating comment:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 
  

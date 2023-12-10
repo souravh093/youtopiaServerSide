@@ -356,6 +356,51 @@ export const getTopNews = async (req, res) => {
   }
 };
 
+
+// find all news by category
+export const getAllNewsByCategory = async (req, res) => {
+  const category = req.params.category;
+
+  try {
+    const findNews = await prisma.news.findMany({
+      where: {
+        category: category,
+      },
+      skip: 0,
+      take: 10,
+      include: {
+        adminUser: true,
+        customer: true,
+        Comment: {
+          include: {
+            customer: true,
+            adminUser: true,
+          },
+        },
+      },
+    });
+
+    if (!findNews) {
+      return res.json({
+        status: 400,
+        message: "News not found. Please enter another id",
+      });
+    }
+
+    return res.json({
+      status: 200,
+      data: findNews,
+      message: "News Found",
+    });
+  } catch (error) {
+    console.error("Error finding news:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 // LikeCount increment by 1 when user likes a news
 export const incrementLikeCount = async (req, res) => {
   const id = req.params.id;
@@ -385,5 +430,37 @@ export const incrementLikeCount = async (req, res) => {
     });
   }
 };
+
+// LikeCount Decrement by 1 when user unlikes a news
+export const decrementLikeCount = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const likeCount = await prisma.news.update({
+      where: {
+        id: id,
+      },
+      data: {
+        LikeCount: {
+          decrement: 1,
+        },
+      },
+    });
+
+    return res.json({
+      status: 200,
+      data: likeCount,
+      message: "Like Count Updated",
+    });
+  } catch (error) {
+    console.error("Error updating like count:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+
 
 
