@@ -11,6 +11,8 @@ export const createRole = async (req, res) => {
         AdminFeatures: {
           create: features.map((feature) => ({
             featuresName: feature.featuresName,
+            sidebarIcon: feature.sidebarIcon,
+            index: feature.index,
             AdminSubFeatures: {
               create: feature.subFeatures.map((subFeature) => ({
                 subFeaturesName: subFeature,
@@ -34,7 +36,6 @@ export const createRole = async (req, res) => {
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
-
 
 // find all role with features and subfeatures
 export const getAllRoles = async (req, res) => {
@@ -94,4 +95,3 @@ export const deleteRole = async (req, res) => {
     });
   }
 };
-

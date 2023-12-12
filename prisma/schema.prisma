@@ -67,6 +67,8 @@ model AdminFeatures {
   adminRoleId      String?
   AdminRole        AdminRole?         @relation(fields: [adminRoleId], references: [id])
   AdminSubFeatures AdminSubFeatures[]
+  sidebarIcon      String?
+  index            Int?
 }
 
 model AdminSubFeatures {

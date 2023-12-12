@@ -55,12 +55,15 @@ export const getAdminUserByEmail = async (req, res) => {
         role: {
           include: {
             AdminFeatures: {
+              orderBy: {
+                index: "asc",
+              },
               include: {
                 AdminSubFeatures: true,
               },
             },
           },
-        },  
+        },
       },
     });
 
