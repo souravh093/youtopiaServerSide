@@ -16,7 +16,7 @@ export const createAdvertisement = async (req, res) => {
       },
     });
 
-    return res.json({
+    return res.send({
       status: 200,
       data: newAdvertisement,
       message: "Advertisement Created",
@@ -39,13 +39,6 @@ export const getAdvertisementById = async (req, res) => {
         id: id,
       },
     });
-
-    if (!findAdvertisement) {
-      return res.status(404).json({
-        status: 404,
-        message: "Advertisement Not Found",
-      });
-    }
 
     return res.json({
       status: 200,

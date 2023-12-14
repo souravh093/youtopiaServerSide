@@ -165,12 +165,12 @@ model VideoNews {
 
 model Advertisement {
   id         String   @id @default(uuid())
-  primary1   String
-  primary2   String
-  secondary1 String
-  secondary2 String
-  tertiary1  String
-  tertiary2  String
+  primary1   String?
+  primary2   String?
+  secondary1 String?
+  secondary2 String?
+  tertiary1  String?
+  tertiary2  String?
   created_at DateTime @default(now())
   status     String   @default("Active")
 }

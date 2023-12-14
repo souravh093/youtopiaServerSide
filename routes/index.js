@@ -7,6 +7,7 @@ import AdminUserRoutes from "./adminUserRoutes.js";
 import NewsRoutes from "./newsRouts.js";
 import CommentRoutes from "./commentRoutes.js";
 import VideoNewsRoutes from "./videoNewsRoutes.js"
+import AdvertisementRoutes from "./advertisementRoutes.js"
 
 const router = Router();
 
@@ -17,5 +18,6 @@ router.use("/api/adminUser", AdminUserRoutes);
 router.use("/api/news", NewsRoutes);
 router.use("/api/comment", CommentRoutes);
 router.use("/api/videoNews", VideoNewsRoutes);
+router.use("/api/advertisement", AdvertisementRoutes);
 
 export default router;
