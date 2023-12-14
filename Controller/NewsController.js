@@ -148,6 +148,10 @@ export const getAllNews = async (req, res) => {
       orderBy: {
         created_at: "desc",
       },
+      include: {
+        adminUser: true,
+        customer: true,
+      },
     });
 
     return res.json({
