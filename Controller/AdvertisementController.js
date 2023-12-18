@@ -2,17 +2,12 @@ import prisma from "../DB/db.config.js";
 
 export const createAdvertisement = async (req, res) => {
   try {
-    const { primary1, primary2, secondary1, secondary2, tertiary1, tertiary2 } =
-      req.body;
+    const { image, name } = req.body;
 
     const newAdvertisement = await prisma.advertisement.create({
       data: {
-        primary1,
-        primary2,
-        secondary1,
-        secondary2,
-        tertiary1,
-        tertiary2,
+        image,
+        name,
       },
     });
 
@@ -56,7 +51,7 @@ export const getAdvertisementById = async (req, res) => {
 // update advertisement by id
 export const updateAdvertisementById = async (req, res) => {
   const id = req.params.id;
-  const { primary1, primary2, secondary1, secondary2, tertiary1, tertiary2 } =
+  const { image, name } =
     req.body;
 
   try {
@@ -65,12 +60,8 @@ export const updateAdvertisementById = async (req, res) => {
         id: id,
       },
       data: {
-        primary1,
-        primary2,
-        secondary1,
-        secondary2,
-        tertiary1,
-        tertiary2,
+        image, 
+        name
       },
     });
 
