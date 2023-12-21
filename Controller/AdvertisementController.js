@@ -2,12 +2,12 @@ import prisma from "../DB/db.config.js";
 
 export const createAdvertisement = async (req, res) => {
   try {
-    const { image, name } = req.body;
+    const { image, title } = req.body;
 
     const newAdvertisement = await prisma.advertisement.create({
       data: {
         image,
-        name,
+        title,
       },
     });
 
@@ -15,6 +15,25 @@ export const createAdvertisement = async (req, res) => {
       status: 200,
       data: newAdvertisement,
       message: "Advertisement Created",
+    });
+  } catch(error) {
+    console.log(error)
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+// find all advertisement
+export const getAllAdvertisement = async (req, res) => {
+  try {
+    const allAdvertisement = await prisma.advertisement.findMany();
+
+    return res.json({
+      status: 200,
+      data: allAdvertisement,
+      message: "All Advertisement",
     });
   } catch {
     return res.status(500).json({

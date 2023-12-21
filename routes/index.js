@@ -1,5 +1,4 @@
 import { Router } from "express";
-
 import CustomerRoutes from "./customerRoutes.js";
 import FeatureRoutes from "./featuresRoutes.js";
 import RoleRoutes from "./roleRoutes.js";
